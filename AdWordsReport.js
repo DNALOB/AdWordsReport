@@ -375,10 +375,10 @@ var AdWordsReport = function(settings) {
    * Maps a row object from AdWordsApp.report with the _columns object.
    * @param  {object} row
    * @param  {array} columnNames
-   * @param  {object} result
    * @return {object}
    */
-  var _mapColumnValues = function(row, columnNames, result) {
+  var _mapColumnValues = function(row, columnNames) {
+    var result = {};
     columnNames.forEach(function(columnName) {
       if(_columns[columnName] !== undefined) {
         var value = row[columnName];
@@ -547,9 +547,8 @@ var AdWordsReport = function(settings) {
     var rows = data.rows();
     while(rows.hasNext()) {
       var row = rows.next();
-      var result = {};
       var columnNames = Object.keys(row);
-      result = _mapColumnValues(row, columnNames, result);
+      var result = _mapColumnValues(row, columnNames);
       finalObject.data.push(result);
     }
     _tempData = finalObject.data;
