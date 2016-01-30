@@ -63,7 +63,7 @@ function main() {
 }
 ```
 
-You can also utilize the exportToSheet function very simply.
+You can also utilize the exportToSheet.
 
 ```javascript
 function main() {
@@ -81,7 +81,7 @@ function main() {
 }
 ```
 
-A spreadsheet will be created on your google drive and in the object you have all the necessary information such as id, name and url.
+A spreadsheet will be created on your google drive and in your object you'll have all the necessary information such as id, name and url.
 
 ```
 {  
@@ -129,7 +129,7 @@ A spreadsheet will be created on your google drive and in the object you have al
 }
 ```
 
-It has functionality for rows() -> hasNext() that AdWordsApp.report class also utilize.
+It has functionality for rows() -> hasNext() similar to AdWordsApp.report.
 
 ```javascript
 function main() {  
