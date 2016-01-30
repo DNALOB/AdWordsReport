@@ -1,3 +1,6 @@
+/* exported AdWordsReport, */
+/* globals AdWordsApp, Logger, SpreadsheetApp */
+
 /**
  * AdWordsReport
  * Wrapper for AdWordsApp.report() (Google AdWords Scripts)
@@ -6,6 +9,7 @@
  * @return {object}
  */
 var AdWordsReport = function(settings) {
+  'use strict';
   settings = settings || {};
   settings.exportToSheet = settings.exportToSheet || false;
   settings.zeroImpression = settings.zeroImpression || true;
@@ -489,7 +493,7 @@ var AdWordsReport = function(settings) {
     } else if (typeof finalAWQL === 'string') {
       finalAWQL = finalAWQL.split(', ').join(',');
     }
-    options = { includeZeroImpressions: settings.zeroImpression };
+    var options = { includeZeroImpressions: settings.zeroImpression };
     settings.awqlOptions = {};
     var report = AdWordsApp.report(finalAWQL, options);
 
