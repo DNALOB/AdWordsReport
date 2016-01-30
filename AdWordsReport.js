@@ -4,8 +4,9 @@ var AdWordsReport = function(settings) {
   settings.remaining = null || settings.remaining;
   settings.exportToSheet = false || settings.exportToSheet;
   settings.zeroImpression = true || settings.zeroImpression;
-  settings.data = [];
   settings.awqlOptions = {};
+
+  var _tempData = [];
 
   /**
    * Helpers for dealing with adwords scripts
@@ -430,15 +431,15 @@ var AdWordsReport = function(settings) {
   };
 
   var hasNextStatement = function() {
-    return settings.data.length > 0;
+    return _tempData.length > 0;
   };
 
   var nextRowStatement = function() {
-    return settings.data.splice(settings.data.length-1,1)[0];
+    return _tempData.splice(_tempData.length-1,1)[0];
   };
 
   var rowsStatement = function() {
-    if(settings.data.length > 0) {
+    if(_tempData.length > 0) {
       return {
         hasNext: hasNextStatement,
         next: nextRowStatement,
@@ -473,7 +474,7 @@ var AdWordsReport = function(settings) {
       });
       finalObject.data.push(rowObject);
     }
-    settings.data = finalObject.data;
+    _tempData = finalObject.data;
     return finalObject;
   };
 
