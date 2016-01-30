@@ -1,9 +1,8 @@
 var AdWordsReport = function(settings) {
   settings = settings || {};
-  settings.limit = null || settings.limit;
-  settings.remaining = null || settings.remaining;
-  settings.exportToSheet = false || settings.exportToSheet;
-  settings.zeroImpression = true || settings.zeroImpression;
+  settings.exportToSheet = settings.exportToSheet || false;
+  settings.zeroImpression = settings.zeroImpression || true;
+  settings.lowImpressionShare = settings.lowImpressionShare || 0.01;
   settings.awqlOptions = {};
 
   var _tempData = [];
@@ -26,8 +25,11 @@ var AdWordsReport = function(settings) {
 
   var _float = function(value) {
     value = String(value);
+    if(value.indexOf('<') > -1) {
+      return settings.lowImpressionShare;
+    }
     if(value.indexOf('%') > -1) {
-      return (parseFloat(value.replace(/[%|<]/g,'')) / 100);
+      return (parseFloat(value.replace(/[%]/g,'')) / 100);
     }
     if(value === '--') {
       return parseFloat(0);
