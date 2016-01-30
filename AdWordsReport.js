@@ -1,3 +1,10 @@
+/**
+ * AdWordsReport
+ * Wrapper for AdWordsApp.report() (Google AdWords Scripts)
+ *
+ * @param  {object} settings
+ * @return {object}
+ */
 var AdWordsReport = function(settings) {
   settings = settings || {};
   settings.exportToSheet = settings.exportToSheet || false;
@@ -8,9 +15,9 @@ var AdWordsReport = function(settings) {
   var _tempData = [];
 
   /**
-   * Helpers for dealing with adwords scripts
-   * returning everything from the report API
-   * as strings and what not.
+   * Transform a string in to an array
+   * @param  {string} value
+   * @return {array}
    */
   var _array = function(value) {
     if(value === '--') {
@@ -19,10 +26,20 @@ var AdWordsReport = function(settings) {
     return value.split(';').map(Function.prototype.call, String.prototype.trim);
   };
 
+  /**
+   * Assure that we do return a string
+   * @param  {string} value
+   * @return {string}
+   */
   var _string = function(value) {
     return String(value);
   };
 
+  /**
+   * Transform a string into a float
+   * @param  {string} value
+   * @return {float}
+   */
   var _float = function(value) {
     value = String(value);
     if(value.indexOf('<') > -1) {
@@ -41,6 +58,7 @@ var AdWordsReport = function(settings) {
    * All columns used in the adwords report api
    * some new ones might be missing, feel free to
    * raise an issue or contribute with a pull request.
+   * @type {object}
    */
   var _columns = {
     AccountCurrencyCode:  _string,
@@ -353,16 +371,43 @@ var AdWordsReport = function(settings) {
     Year:  _string
   };
 
-  var selectStatement = function(rows) {
-    if(Array.isArray(rows)) {
-      rows = rows.join(',');
+  /**
+   * Maps a row object from AdWordsApp.report with the _columns object.
+   * @param  {object} row
+   * @param  {array} columnNames
+   * @param  {object} result
+   * @return {object}
+   */
+  var _mapColumnValues = function(row, columnNames, result) {
+    columnNames.forEach(function(columnName) {
+      if(_columns[columnName] !== undefined) {
+        var value = row[columnName];
+        result[columnName] = _columns[columnName](value);
+      }
+    });
+    return result;
+  };
+
+  /**
+   * Sets our select statment to our AWQL-query.
+   * @param  {string|array} columns
+   * @return {object}
+   */
+  var selectStatement = function(columns) {
+    if(Array.isArray(columns)) {
+      columns = columns.join(',');
     }
-    settings.awqlOptions.select = rows;
+    settings.awqlOptions.select = columns;
     return {
       from: fromStatement
     };
   };
 
+  /**
+   * Sets our from statement to our AWQL-query.
+   * @param  {string} report
+   * @return {object}
+   */
   var fromStatement = function(report) {
     settings.awqlOptions.from = report;
     return {
@@ -372,6 +417,11 @@ var AdWordsReport = function(settings) {
     };
   };
 
+  /**
+   * Sets our where statement in our AWQL-query.
+   * @param  {string} statement
+   * @return {object}
+   */
   var whereStatement = function(statement) {
     settings.awqlOptions.where = statement;
     return {
@@ -380,6 +430,11 @@ var AdWordsReport = function(settings) {
     };
   };
 
+  /**
+   * Sets our add an and statment to our AWQL-query.
+   * @param  {[type]} statement
+   * @return {[type]}           [description]
+   */
   var andStatement = function(statement) {
     if(!settings.awqlOptions.and) {
         settings.awqlOptions.and = [];
@@ -395,6 +450,11 @@ var AdWordsReport = function(settings) {
     };
   };
 
+  /**
+   * Sets our during statement in our AWQL-query
+   * @param  {string|array} timeframe
+   * @return {object}
+   */
   var duringStatement = function(timeframe) {
       if(Array.isArray(timeframe)) {
         timeframe = timeframe.join(',');
@@ -405,6 +465,10 @@ var AdWordsReport = function(settings) {
       };
   };
 
+  /**
+   * Runs the current AWQL-query settings through AdWordsApp.report
+   * @return {object}
+   */
   var runAWQL = function() {
     var finalAWQL = settings.awqlOptions;
     if(typeof settings.awqlOptions === 'object') {
@@ -432,14 +496,26 @@ var AdWordsReport = function(settings) {
     return parseResult(report);
   };
 
+  /**
+   * Check if _tempData has a next row.
+   * @return {boolean}
+   */
   var hasNextStatement = function() {
     return _tempData.length > 0;
   };
 
+  /**
+   * Splice the last object from _tempData and returns it.
+   * @return {object}
+   */
   var nextRowStatement = function() {
     return _tempData.splice(_tempData.length-1,1)[0];
   };
 
+  /**
+   * Returns the hasNext and next functionality.
+   * @return {object}
+   */
   var rowsStatement = function() {
     if(_tempData.length > 0) {
       return {
@@ -447,10 +523,15 @@ var AdWordsReport = function(settings) {
         next: nextRowStatement,
       };
     } else {
-      throw new Error('There is no rows...');
+      Logger.log('Cant use .rows() since there are no rows.');
     }
   };
 
+  /**
+   * Parse the result from the AdWordsApp.report
+   * @param  {object}
+   * @return {object}
+   */
   var parseResult = function(data) {
     var finalObject = {};
     finalObject.rows = rowsStatement;
@@ -466,20 +547,20 @@ var AdWordsReport = function(settings) {
     var rows = data.rows();
     while(rows.hasNext()) {
       var row = rows.next();
-      var rowObject = {};
+      var result = {};
       var columnNames = Object.keys(row);
-      columnNames.forEach(function(columnName) {
-        if(_columns[columnName] != undefined) {
-          var value = row[columnName];
-          rowObject[columnName] = _columns[columnName](value);
-        }
-      });
-      finalObject.data.push(rowObject);
+      result = _mapColumnValues(row, columnNames, result);
+      finalObject.data.push(result);
     }
     _tempData = finalObject.data;
     return finalObject;
   };
 
+  /**
+   * Public function to set settings.
+   * @param  {Object} options
+   * @return {void}
+   */
   this.use = function(options) {
     if (typeof options === 'object') {
       if(typeof options.exportToSheet === 'boolean') {
@@ -488,11 +569,20 @@ var AdWordsReport = function(settings) {
       if(typeof options.zeroImpression === 'boolean') {
         settings.zeroImpression = options.zeroImpression;
       }
+      if(typeof options.lowImpressionShare === 'number') {
+        settings.lowImpressionShare = options.lowImpressionShare;
+      }
     } else {
-        throw new Error('Wrong params "options"');
+        throw new Error('Wrong params in .use()');
     }
   };
 
+  /**
+   * Public function to initialize select our run a AWQL-query if passed
+   * as an option.
+   * @param  {object} options
+   * @return {object}
+   */
   this.awql = function(options) {
     if(options) {
       settings.awqlOptions = options;
