@@ -3,6 +3,10 @@ Wrapper for the AdWordsApp.report class
 
 This a  wrapper for the [AdWordsApp.report()](https://developers.google.com/adwords/scripts/docs/reference/adwordsapp/adwordsapp_report) no more annoying strings when you expect floats or arrays and more neat way to write your AWQL-string.
 
+## Installation
+
+Just [copy and paste](https://raw.githubusercontent.com/getscript/AdWordsReport/master/dist/AdWordsReport.min.js) into the bottom of your adwords script.
+
 ## Examples
 
 ```javascript
