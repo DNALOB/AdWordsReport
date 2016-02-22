@@ -188,6 +188,7 @@ var AdWordsReport = function(settings) {
     CreativeId:  _string,
     CreativeTrackingUrlTemplate:  _string,
     CreativeUrlCustomParameters:  _string,
+    CreativeQualityScore: _number,
     Criteria:  _string,
     CriteriaDestinationUrl:  _string,
     CriteriaId:  _string,
@@ -220,6 +221,8 @@ var AdWordsReport = function(settings) {
     EffectiveDestinationUrl:  _string,
     EndTime:  _string,
     EnhancedCpcEnabled:  _string,
+    EstimatedAddClicksAtFirstPositionCpc: _number,
+    EstimatedAddCostAtFirstPositionCpc: _number,
     EstimatedCrossDeviceConversions:  _number,
     EstimatedTotalConversionRate:  _number,
     EstimatedTotalConversions:  _number,
@@ -239,6 +242,7 @@ var AdWordsReport = function(settings) {
     FinalMobileUrls:  _array,
     FinalUrls:  _array,
     FirstPageCpc:  _number,
+    FirstPositionCpc: _number,
     GclId:  _string,
     Headline:  _string,
     HourOfDay:  _number,
@@ -311,6 +315,7 @@ var AdWordsReport = function(settings) {
     Period:  _string,
     PlaceholderType:  _number,
     PlacementUrl:  _string,
+    PostClickQualityScore: _number,
     PositionSignificance:  _number,
     PrimaryCompanyName:  _string,
     ProductCondition:  _string,
@@ -330,6 +335,7 @@ var AdWordsReport = function(settings) {
     SearchBudgetLostImpressionShare:  _number,
     SearchExactMatchImpressionShare:  _number,
     SearchImpressionShare:  _number,
+    SearchPredictedCtr: _number,
     SearchQuery:  _string,
     SearchRankLostImpressionShare:  _number,
     SerpType:  _string,
@@ -393,7 +399,7 @@ var AdWordsReport = function(settings) {
   };
 
   /**
-   * Sets our select statment to our AWQL-query.
+   * Set which columns should be used whith our AWQL-query.
    * @param  {string|array} columns
    * @return {object}
    */
@@ -408,7 +414,7 @@ var AdWordsReport = function(settings) {
   };
 
   /**
-   * Sets our from statement to our AWQL-query.
+   * Set which report should be used with our AWQL-query.
    * @param  {string} report
    * @return {object}
    */
@@ -422,7 +428,7 @@ var AdWordsReport = function(settings) {
   };
 
   /**
-   * Sets our where statement in our AWQL-query.
+   * Set the where statement in our AWQL-query.
    * @param  {string} statement
    * @return {object}
    */
@@ -435,7 +441,7 @@ var AdWordsReport = function(settings) {
   };
 
   /**
-   * Sets our add an and statment to our AWQL-query.
+   * Add an and statment to our AWQL-query.
    * @param  {[type]} statement
    * @return {[type]}           [description]
    */
@@ -455,7 +461,7 @@ var AdWordsReport = function(settings) {
   };
 
   /**
-   * Sets our during statement in our AWQL-query
+   * Set the during statement in our AWQL-query
    * @param  {string|array} timeframe
    * @return {object}
    */
@@ -470,7 +476,7 @@ var AdWordsReport = function(settings) {
   };
 
   /**
-   * Runs the current AWQL-query settings through AdWordsApp.report
+   * Runs the current AWQL-query with AdWordsApp.report
    * @return {object}
    */
   var runAWQL = function() {
@@ -509,7 +515,7 @@ var AdWordsReport = function(settings) {
   };
 
   /**
-   * Splice the last object from _tempData and returns it.
+   * Splice the last object from _tempData and returns its value.
    * @return {object}
    */
   var nextRowStatement = function() {
@@ -517,7 +523,7 @@ var AdWordsReport = function(settings) {
   };
 
   /**
-   * Returns the hasNext and next functionality.
+   * Initialize the hasNext and next functionality.
    * @return {object}
    */
   var rowsStatement = function() {
@@ -581,7 +587,7 @@ var AdWordsReport = function(settings) {
   };
 
   /**
-   * Public function to initialize select our run a AWQL-query if passed
+   * Public function to initialize select or run a full AWQL-query if passed
    * as an option.
    * @param  {object} options
    * @return {object}
@@ -593,7 +599,7 @@ var AdWordsReport = function(settings) {
         settings.awqlOptions.select = settings.awqlOptions.select.join(',');
       }
       if(Array.isArray(settings.awqlOptions.during)) {
-        settings.awqlOptions.during = settings.awqlOptions.during.joing(',');
+        settings.awqlOptions.during = settings.awqlOptions.during.join(',');
       }
       return {
         run: runAWQL
