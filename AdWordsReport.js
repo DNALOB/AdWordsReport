@@ -25,7 +25,7 @@ var AdWordsReport = function(settings) {
    */
   var _array = function(value) {
     if(value === '--') {
-      return null;
+      return [];
     }
     return value.split(';').map(Function.prototype.call, String.prototype.trim);
   };
@@ -511,7 +511,7 @@ var AdWordsReport = function(settings) {
    * @return {boolean}
    */
   var hasNextStatement = function() {
-    return _tempData.length > 0;
+    return this.data.length > 0;
   };
 
   /**
@@ -519,7 +519,7 @@ var AdWordsReport = function(settings) {
    * @return {object}
    */
   var nextRowStatement = function() {
-    return _tempData.splice(_tempData.length-1,1)[0];
+    return this.data.splice(this.data.length-1,1)[0];
   };
 
   /**
@@ -531,6 +531,7 @@ var AdWordsReport = function(settings) {
       return {
         hasNext: hasNextStatement,
         next: nextRowStatement,
+        data: JSON.parse(JSON.stringify(_tempData))
       };
     } else {
       Logger.log('Cant use .rows() since there are no rows.');
