@@ -25,7 +25,7 @@ var AdWordsReport = function(settings) {
    */
   var _array = function(value) {
     if(value === '--') {
-      return null;
+      return [];
     }
     return value.split(';').map(Function.prototype.call, String.prototype.trim);
   };
