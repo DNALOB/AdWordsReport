@@ -561,7 +561,7 @@ var AdWordsReport = function(settings) {
       var result = _mapColumnValues(row, columnNames);
       finalObject.data.push(result);
     }
-    _tempData = finalObject.data;
+    _tempData = JSON.parse(JSON.stringify(finalObject.data));
     return finalObject;
   };
 
