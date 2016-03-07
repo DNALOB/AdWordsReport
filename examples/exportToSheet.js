@@ -1,6 +1,3 @@
-/* exported main */
-/* globals Logger */
-'use strict';
 function main() {
 
   var columns = ['CampaignName','Clicks','Impressions','AverageCpc','ConvertedClicks'];
