@@ -21,6 +21,7 @@ function main() {
     Logger.log('Impressions: ' + row.Impressions);
     Logger.log('Cpc: ' + row.AverageCpc);
     Logger.log('Conversions: ' + row.ConvertedClicks);
+    Logger.log('Cost per Impressions: ' + row.Cost / row.Impressions );
 
     Logger.log('----------------');
   }
