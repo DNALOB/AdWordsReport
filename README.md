@@ -3,6 +3,17 @@ Wrapper for the AdWordsApp.report class
 
 This a  wrapper for the [AdWordsApp.report()](https://developers.google.com/adwords/scripts/docs/reference/adwordsapp/adwordsapp_report) no more annoying strings when you expect floats or arrays and more neat way to write your AWQL-string.
 
+## Updates
+For public Release Notes on the AdWords API see: https://developers.google.com/adwords/api/docs/reference/
+#### API v201607
+
+|Report|Column|Info|
+|---|---|---|
+|Various reports|ConvertedClicks|The **ConvertedClicks** field and its derived fields are removed from all reports. See the [release notes](https://developers.google.com/adwords/api/docs/reference/#new-report-v201607) for more information about what to use instead. In addition, the **CreativeConversions** and **CreativeConversionRate** fields were added to the CREATIVE\_CONVERSION_REPORT.
+|Final Url report|EffectiveFinalUrl, FinalURL|The **[EffectiveFinalUrl](https://developers.google.com/adwords/api/docs/appendix/reports/final-url-report#effectivefinalurl)** field in the Final Url report and the **[FinalUrl](https://developers.google.com/adwords/api/docs/appendix/reports/search-query-performance-report#finalurl)** field in the Search Query Performance report will now return a default value of "--" instead of a blank value when no final URL is specified.|
+|Various reports|ClickType|The **[ClickType](https://developers.google.com/adwords/api/docs/appendix/reports/all-reports#clicktype)** field can now return two additional types of clicks: **VIDEO_END_CAP_CLICKS** (display value "End cap") and **APP_DEEPLINK** (display value "App engagement ad deep link").|
+|Various reports|QualityScore|The **[QualityScore](https://developers.google.com/adwords/api/docs/appendix/reports/all-reports#qualityscore)** field will now return a value of "--" and the **[HasQualityScore](https://developers.google.com/adwords/api/docs/appendix/reports/all-reports#hasqualityscore)** field will return a value of false when no quality score is available.|
+
 ## Installation
 
 Just [copy and paste](https://raw.githubusercontent.com/getscript/AdWordsReport/master/dist/AdWordsReport.min.js) into the bottom of your adwords script.
