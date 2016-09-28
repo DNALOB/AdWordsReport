@@ -38,6 +38,19 @@ var AdWordsReport = function(settings) {
     return _string(value);
   }
 
+
+  /**
+   * Transform a string in to boolean
+   * @param {string} value
+   * @return {boolean}
+   */
+  var _boolean = function(value) {
+    // @TODO:
+    // We are still working on this
+    // For so long just return a string
+    return _stirng(value);
+  }
+
   /**
    * Transform a string in to an object
    * @param  {string} value
