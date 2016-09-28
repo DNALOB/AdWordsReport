@@ -4,7 +4,9 @@ var uglify = require('gulp-uglify');
 
 gulp.task('build', function() {
 	gulp.src('AdWordsReport.js')
-		.pipe(uglify())
+		.pipe(uglify({
+            'preserveComments': 'license'
+        }))
 		.pipe(rename({
 			suffix: '.min'
 		}))
